@@ -3,42 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Auto Repair | Your City's Best Mechanic</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Add Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Elite Auto Service | Professional Auto Repair</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container">
-            <a class="navbar-brand" href="#">Pro Auto Repair</a>
-            <!-- Navigation items -->
+            <div class="logo">Elite Auto Service</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#book" class="cta-button">Book Now</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero">
+    <section id="home" class="hero">
         <div class="container">
-            <h1>Expert Auto Repair Services</h1>
-            <p>Professional mechanics you can trust</p>
-            <a href="#book" class="cta-button">Book Appointment</a>
+            <h1>Expert Auto Repair & Maintenance</h1>
+            <p>Trust your vehicle with certified mechanics</p>
+            <div class="hero-buttons">
+                <a href="#book" class="primary-btn">Schedule Service</a>
+                <a href="#services" class="secondary-btn">Our Services</a>
+            </div>
         </div>
-    </header>
+    </section>
 
     <!-- Services Section -->
-    <section id="services">
-        <!-- Service cards will go here -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <i class="fas fa-oil-can"></i>
+                    <h3>Oil Change</h3>
+                    <p>Professional oil change services to keep your engine running smoothly.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-car-battery"></i>
+                    <h3>Battery Service</h3>
+                    <p>Battery testing, maintenance, and replacement services.</p>
+                </div>
+                <!-- Add more service cards -->
+            </div>
+        </div>
     </section>
 
     <!-- About Section -->
-    <section id="about">
-        <!-- About content -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Why Choose Us</h2>
+                    <p>With over 20 years of experience, we provide reliable and honest auto repair services.</p>
+                    <ul class="features">
+                        <li>Certified Mechanics</li>
+                        <li>Latest Diagnostic Equipment</li>
+                        <li>Warranty on Services</li>
+                        <li>Competitive Pricing</li>
+                    </ul>
+                </div>
+                <div class="about-image">
+                    <img src="images/workshop.jpg" alt="Our Workshop">
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Contact Form -->
-    <section id="contact">
-        <!-- Contact form -->
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-grid">
+                <div class="contact-form">
+                    <form id="appointmentForm">
+                        <input type="text" placeholder="Name" required>
+                        <input type="email" placeholder="Email" required>
+                        <select name="service" required>
+                            <option value="">Select Service</option>
+                            <option value="oil-change">Oil Change</option>
+                            <option value="brake-service">Brake Service</option>
+                            <!-- Add more options -->
+                        </select>
+                        <textarea placeholder="Message"></textarea>
+                        <button type="submit" class="primary-btn">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <h3>Call Us</h3>
+                        <p>(555) 123-4567</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Location</h3>
+                        <p>123 Auto Service Lane<br>Your City, ST 12345</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Elite Auto Service</h4>
+                    <p>Professional auto repair services you can trust.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Hours</h4>
+                    <p>Mon-Fri: 8am - 6pm<br>Sat: 9am - 3pm<br>Sun: Closed</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Elite Auto Service. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
 </body>
 </html>
