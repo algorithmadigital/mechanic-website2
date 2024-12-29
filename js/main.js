@@ -1,120 +1,134 @@
-// DOM Elements
+// Wait for DOM to load
 document.addEventListener('DOMContentLoaded', () => {
-    // Navigation
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    // Appointment Form
-    const appointmentForm = document.getElementById('appointmentForm');
-    
-    // Service Calculator
-    const serviceCalculator = document.getElementById('serviceCalculator');
-    
-    // Testimonials Slider
-    const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-    
-    // Mobile Menu Toggle
-    if (mobileMenuBtn && navMenu) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
-        });
-    }
-
-    // Appointment Form Handler
-    if (appointmentForm) {
-        appointmentForm.addEventListener('submit', handleAppointment);
-    }
-
-    // Service Price Calculator
-    if (serviceCalculator) {
-        serviceCalculator.addEventListener('change', calculateServicePrice);
-    }
-
-    // Initialize Testimonials Slider
-    initTestimonialSlider();
+    initializeApp();
 });
 
-// Appointment Form Handler
-function handleAppointment(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const appointment = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        service: formData.get('service'),
-        date: formData.get('date'),
-        message: formData.get('message')
-    };
+function initializeApp() {
+    // Initialize all components
+    setupMobileMenu();
+    setupSmoothScroll();
+    setupAppointmentForm();
+    setupServiceCalculator();
+    initializeAnimations();
+}
 
-    // Validate form data
-    if (validateAppointment(appointment)) {
-        // Send to server (replace with your endpoint)
-        submitAppointment(appointment);
+// Mobile Menu Handler
+function setupMobileMenu() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+    }
+}
+
+// Smooth Scroll for Navigation
+function setupSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                document.querySelector('.nav-links')?.classList.remove('active');
+                document.querySelector('.mobile-menu-btn')?.classList.remove('active');
+            }
+        });
+    });
+}
+
+// Appointment Form Handler
+function setupAppointmentForm() {
+    const form = document.getElementById('appointmentForm');
+    
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const formDetails = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                service: formData.get('service'),
+                message: formData.get('message'),
+                date: formData.get('date')
+            };
+
+            if (validateForm(formDetails)) {
+                try {
+                    await submitAppointment(formDetails);
+                    showNotification('Appointment scheduled successfully!', 'success');
+                    form.reset();
+                } catch (error) {
+                    showNotification('Error scheduling appointment. Please try again.', 'error');
+                }
+            }
+        });
     }
 }
 
 // Form Validation
-function validateAppointment(data) {
+function validateForm(data) {
     const errors = [];
-    
+
     if (!data.name) errors.push('Name is required');
     if (!data.email || !isValidEmail(data.email)) errors.push('Valid email is required');
-    if (!data.phone) errors.push('Phone number is required');
     if (!data.service) errors.push('Please select a service');
     if (!data.date) errors.push('Please select a date');
 
     if (errors.length > 0) {
-        showErrors(errors);
+        showNotification(errors.join('\n'), 'error');
         return false;
     }
     return true;
 }
 
 // Service Price Calculator
-function calculateServicePrice() {
-    const selectedServices = document.querySelectorAll('input[name="service"]:checked');
-    let totalPrice = 0;
+function setupServiceCalculator() {
+    const calculator = document.getElementById('serviceCalculator');
+    
+    if (calculator) {
+        const services = {
+            'oil-change': 49.99,
+            'brake-service': 199.99,
+            'tire-rotation': 29.99,
+            'engine-diagnostic': 89.99,
+            'ac-service': 129.99
+        };
 
-    const servicePrices = {
-        'oil-change': 49.99,
-        'brake-service': 199.99,
-        'tire-rotation': 29.99,
-        'engine-tune': 299.99,
-        'ac-service': 149.99
-    };
+        calculator.addEventListener('change', (e) => {
+            let total = 0;
+            const selected = document.querySelectorAll('#serviceCalculator input:checked');
+            
+            selected.forEach(service => {
+                total += services[service.value] || 0;
+            });
 
-    selectedServices.forEach(service => {
-        totalPrice += servicePrices[service.value] || 0;
-    });
-
-    document.getElementById('totalPrice').textContent = `$${totalPrice.toFixed(2)}`;
+            document.getElementById('totalPrice').textContent = `$${total.toFixed(2)}`;
+        });
+    }
 }
 
-// Testimonials Slider
-function initTestimonialSlider() {
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.testimonial-slide');
-    
-    if (slides.length === 0) return;
+// Scroll Animations
+function initializeAnimations() {
+    const elements = document.querySelectorAll('.animate-on-scroll');
 
-    function showSlide(index) {
-        slides.forEach(slide => slide.style.display = 'none');
-        slides[index].style.display = 'block';
-    }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, { threshold: 0.1 });
 
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    // Initialize first slide
-    showSlide(0);
-    
-    // Auto advance slides every 5 seconds
-    setInterval(nextSlide, 5000);
+    elements.forEach(element => observer.observe(element));
 }
 
 // Utility Functions
@@ -122,56 +136,46 @@ function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function showErrors(errors) {
-    const errorDiv = document.getElementById('form-errors');
-    if (errorDiv) {
-        errorDiv.innerHTML = errors.map(error => `<p class="error">${error}</p>`).join('');
-    }
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
 }
 
 async function submitAppointment(data) {
-    try {
-        const response = await fetch('/api/appointments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
+    // Replace with your actual API endpoint
+    const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    });
 
-        if (response.ok) {
-            showSuccess('Appointment scheduled successfully!');
-            resetForm();
-        } else {
-            throw new Error('Failed to schedule appointment');
-        }
-    } catch (error) {
-        showErrors(['Failed to schedule appointment. Please try again.']);
+    if (!response.ok) {
+        throw new Error('Failed to submit appointment');
     }
+
+    return await response.json();
 }
 
-// Smooth Scroll for Navigation Links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
-
-// Show/Hide Header on Scroll
+// Header Scroll Effect
 let lastScroll = 0;
-const header = document.querySelector('header');
-
 window.addEventListener('scroll', () => {
+    const header = document.querySelector('.navbar');
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll <= 0) {
         header.classList.remove('scroll-up');
         return;
     }
-    
+
     if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
         header.classList.remove('scroll-up');
         header.classList.add('scroll-down');
